@@ -27,18 +27,19 @@ settings = get_settings()
 
 class MyService(Service):
     """
-Service that receives a list of comments with embedded vectors, uses a pre-trained 
-XGBoost model to predict a category label (from 0 to 5) for each comment, appends 
-the prediction to each comment, and returns the full annotated list in JSON format.
+    Service that receives a list of categorized user comments, groups them by topic, and uses a 
+    predefined LLM-based prompt to extract the most important and frequently mentioned improvement 
+    points per category. Each category is summarized with up to N actionable insights and the full 
+    annotated result is returned in JSON format.
 
-Categories:
-0 - Bugs / technical issues  
-1 - Requested features  
-2 - Design & UX  
-3 - Performance & speed  
-4 - Login / account  
-5 - Other
-"""
+    Categories:
+    0 - Bugs / technical issues  
+    1 - Requested features  
+    2 - Design & UX  
+    3 - Performance & speed  
+    4 - Login / account  
+    5 - Other
+    """
 
     
 
@@ -49,8 +50,8 @@ Categories:
     def __init__(self):
         super().__init__(
             # TODO: 3. CHANGE THE SERVICE NAME AND SLUG
-            name="comments-categorizer",
-            slug="comments-categorizer",
+            name="comments-summarizer",
+            slug="comments-summarizer",
             url=settings.service_url,
             summary=api_summary,
             description=api_description,
@@ -144,36 +145,41 @@ async def lifespan(app: FastAPI):
 
 # TODO: 6. CHANGE THE API DESCRIPTION AND SUMMARY
 api_description = """
-This API receives a list of comments with precomputed vector embeddings and uses a 
-pre-trained XGBoost model to predict a category label (from 0 to 5) for each comment.
+    This API receives a list of user comments, each already categorized (labels 0 to 5), 
+    and returns a structured summary of the most frequently mentioned improvement points 
+    for each category, using a language model to extract up to N actionable insights.
 
-### Input (application/json):
+    ### Input (application/json):
 
-- `comments` (list of objects, required): Each object must contain:
-  - `vector` (list of float): Precomputed embedding of the comment
-  - Any additional metadata (e.g. `content`, `at`, etc.)
+    - `comments` (list of objects, required): Each object must contain:
+    - `content` (string): The text of the comment
+    - `category` (integer from 0 to 5): Precomputed label indicating the comment category
 
-### Output (application/json):
+    ### Output (application/json):
 
-Returns the full list of input comments, each annotated with:
-- `prediction`: Integer label between 0 and 5, predicted by the model
+    Returns a summary object with one entry per category, each containing:
+    - `category`: Integer label between 0 and 5
+    - `description`: Human-readable category name
+    - `top_points`: List of up to N actionable and frequently mentioned improvement points
 
-### Categories:
-0 - Bugs / technical issues  
-1 - Requested features  
-2 - Design & UX  
-3 - Performance & speed  
-4 - Login / account  
-5 - Other
-"""
+    ### Categories:
+    0 - Bugs / technical issues  
+    1 - Requested features  
+    2 - Design & UX  
+    3 - Performance & speed  
+    4 - Login / account  
+    5 - Other
+    """
 
-api_summary = "Classify user comments into 6 categories using a pre-trained XGBoost model"
+
+api_summary = "Summarize categorized user comments into key improvement points using an LLM-based pipeline"
+
 
 # Define the FastAPI application with information
 # TODO: 7. CHANGE THE API TITLE, VERSION, CONTACT AND LICENSE
 app = FastAPI(
     lifespan=lifespan,
-    title="Comments Categorizer",
+    title="Comments Summarizer",
     description=api_description,
     version="0.0.1",
     contact={
