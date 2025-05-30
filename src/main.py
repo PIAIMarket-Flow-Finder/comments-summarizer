@@ -19,7 +19,7 @@ from common_code.common.models import FieldDescription, ExecutionUnitTag
 from contextlib import asynccontextmanager
 
 # Imports required by the service's model
-from app.logic.categorize_comments import categorize_comments
+from app.logic.summarize_comments import summarize_comments
 import json
 
 settings = get_settings()
@@ -82,11 +82,11 @@ Categories:
 
         raw = data["input"].data
 
-        sorted_comments = categorize_comments(**json.loads(raw))
+        summarized_comments = asyncio.run(summarize_comments(json.loads(raw)))
 
         return {
             "result": TaskData(
-                data=sorted_comments.model_dump_json(),
+                data=summarized_comments.model_dump_json(),
                 type=FieldDescriptionType.APPLICATION_JSON,
             )
         }
