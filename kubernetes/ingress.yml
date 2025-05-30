@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: list-embedding-generator-ingress
+spec:
+  ingressClassName: nginx-ext
+  tls:
+    - hosts:
+        - list-embedding-generator.kube-ext.isc.heia-fr.ch
+  rules:
+    - host: list-embedding-generator.kube-ext.isc.heia-fr.ch
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: list-embedding-generator-service
+                port:
+                  number: 80
