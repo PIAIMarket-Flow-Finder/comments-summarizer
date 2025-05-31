@@ -12,6 +12,7 @@ from collections import defaultdict
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
+
 # Defines the output schema expected by the API
 class CommentsOut(BaseModel):
     summary: List[Dict[str, Any]]  # ou adapte selon le contenu exact
@@ -30,6 +31,7 @@ category_names = {
     5: "Other"
 }
 
+
 def build_summary_prompt(description: str, comments: list[str], nb_points: int) -> str:
     """
     Construct the prompt for summarizing a category.
@@ -42,9 +44,11 @@ def build_summary_prompt(description: str, comments: list[str], nb_points: int) 
         "– If fewer than that number of truly relevant points exist, list only those.\n"
         "– Do not invent or generalize: each point must clearly reference the underlying user feedback.\n"
         "– Use precise language in english so that a developer reading these points understands exactly what to fix.\n"
-        "- Provide an objective description of the problem as if you were explaining it, do not phrase it as a task to be accomplished.\n"
+        "- Provide an objective description of the problem as if you were explaining it, do not phrase it as a task to"
+        " be accomplished.\n"
         "– Order the points from most important to least important.\n"
-        "– At the end of each point, append a frequency score in parentheses indicating how often this issue appears (e.g., “(12 mentions)”).\n\n"
+        "– At the end of each point, append a frequency score in parentheses indicating how often this issue appears "
+        "(e.g., “(12 mentions)”).\n\n"
         "Return ONLY a valid JSON array of strings (double-quoted), without any additional text.\n\n"
         "Comments:\n"
         f"{comments_text}\n\n"
@@ -54,12 +58,15 @@ def build_summary_prompt(description: str, comments: list[str], nb_points: int) 
         "– If fewer than that number of truly relevant points exist, list only those.\n"
         "– Do not invent or generalize: each point must clearly reference the underlying user feedback.\n"
         "– Use precise language in english so that a developer reading these points understands exactly what to fix.\n"
-        "- Provide an objective description of the problem as if you were explaining it, do not phrase it as a task to be accomplished.\n"
+        "- Provide an objective description of the problem as if you were explaining it, do not phrase it as a task to "
+        "be accomplished.\n"
         "– Order the points from most important to least important.\n"
-        "– At the end of each point, append a frequency score in parentheses indicating how often this issue appears (e.g., “(12 mentions)”).\n\n"
+        "– At the end of each point, append a frequency score in parentheses indicating how often this issue appears "
+        "(e.g., “(12 mentions)”).\n\n"
         "Return ONLY a valid JSON array of strings (double-quoted), without any additional text.\n\n"
         "Answer with a JSON array of strings."
     )
+
 
 def clean_and_parse(raw: str):
     """
@@ -97,6 +104,7 @@ def clean_and_parse(raw: str):
     # If all parsing fails, return the raw text in a single-item list
     return [raw]
 
+
 async def summarize_category(label: int, comments: list[str], nb_points: int):
     """
     Send a summarization request for a given category and
@@ -127,9 +135,8 @@ async def summarize_category(label: int, comments: list[str], nb_points: int):
         "top_points": summary
     }
 
+
 async def summarize_comments(raw):
-
-
     comments = raw['comments']
 
     # Group comments by category

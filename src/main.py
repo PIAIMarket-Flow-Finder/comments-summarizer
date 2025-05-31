@@ -27,21 +27,19 @@ settings = get_settings()
 
 class MyService(Service):
     """
-    Service that receives a list of categorized user comments, groups them by topic, and uses a 
-    predefined LLM-based prompt to extract the most important and frequently mentioned improvement 
-    points per category. Each category is summarized with up to N actionable insights and the full 
+    Service that receives a list of categorized user comments, groups them by topic, and uses a
+    predefined LLM-based prompt to extract the most important and frequently mentioned improvement
+    points per category. Each category is summarized with up to N actionable insights and the full
     annotated result is returned in JSON format.
 
     Categories:
-    0 - Bugs / technical issues  
-    1 - Requested features  
-    2 - Design & UX  
-    3 - Performance & speed  
-    4 - Login / account  
+    0 - Bugs / technical issues
+    1 - Requested features
+    2 - Design & UX
+    3 - Performance & speed
+    4 - Login / account
     5 - Other
     """
-
-    
 
     # Any additional fields must be excluded for Pydantic to work
     _model: object
@@ -145,8 +143,8 @@ async def lifespan(app: FastAPI):
 
 # TODO: 6. CHANGE THE API DESCRIPTION AND SUMMARY
 api_description = """
-    This API receives a list of user comments, each already categorized (labels 0 to 5), 
-    and returns a structured summary of the most frequently mentioned improvement points 
+    This API receives a list of user comments, each already categorized (labels 0 to 5),
+    and returns a structured summary of the most frequently mentioned improvement points
     for each category, using a language model to extract up to N actionable insights.
 
     ### Input (application/json):
@@ -163,11 +161,11 @@ api_description = """
     - `top_points`: List of up to N actionable and frequently mentioned improvement points
 
     ### Categories:
-    0 - Bugs / technical issues  
-    1 - Requested features  
-    2 - Design & UX  
-    3 - Performance & speed  
-    4 - Login / account  
+    0 - Bugs / technical issues
+    1 - Requested features
+    2 - Design & UX
+    3 - Performance & speed
+    4 - Login / account
     5 - Other
     """
 

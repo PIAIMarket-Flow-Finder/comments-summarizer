@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: list-embedding-generator-stateful
+  name: comments-summarizer-stateful
   labels:
-    app: list-embedding-generator
+    app: comments-summarizer
 spec:
-  serviceName: list-embedding-generator
+  serviceName: comments-summarizer
   replicas: 1
   selector:
     matchLabels:
-      app: list-embedding-generator
+      app: comments-summarizer
   template:
     metadata:
       labels:
-        app: list-embedding-generator
+        app: comments-summarizer
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-      - name: list-embedding-generator
+      - name: comments-summarizer
         image: ghcr.io/piaimarket-flow-finder/list-vectorizer:latest
         # If you build the image locally, change the next line to `imagePullPolicy: Never` - there is no need to pull the image
         imagePullPolicy: Always
@@ -27,4 +27,4 @@ spec:
           containerPort: 80
         envFrom:
           - configMapRef:
-              name: list-embedding-generator-config
+              name: comments-summarizer-config

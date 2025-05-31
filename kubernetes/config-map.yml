@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: list-embedding-generator-config
+  name: comments-summarizer-config
   labels:
-    app: list-embedding-generator
+    app: comments-summarizer
 data:
   ENVIRONMENT: "development"
   LOG_LEVEL: "debug"
