@@ -18,9 +18,6 @@ class CommentsOut(BaseModel):
     summary: List[Dict[str, Any]]  # ou adapte selon le contenu exact
 
 
-# Limit concurrent API requests
-token_semaphore = Semaphore(2)
-
 # Mapping of category labels to descriptions
 category_names = {
     0: "Bugs / technical issues",
@@ -110,6 +107,9 @@ async def summarize_category(label: int, comments: list[str], nb_points: int):
     Send a summarization request for a given category and
     return a dict with label, description, and extracted points.
     """
+    # Limit concurrent API requests
+    token_semaphore = Semaphore(2)
+
     description = category_names[label]
     prompt = build_summary_prompt(description, comments, nb_points)
 
