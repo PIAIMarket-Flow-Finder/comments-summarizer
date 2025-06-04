@@ -118,7 +118,7 @@ async def summarize_category(label: int, comments: list[str], nb_points: int):
             response = await client.post(
                 "https://ollama.kube.isc.heia-fr.ch/api/generate",
                 json={
-                    "model": "qwen2.5:14b-instruct",
+                    "model": "qwen2.5:32b-instruct",
                     "prompt": prompt,
                     "stream": False,
                     "temperature": 0.0,
