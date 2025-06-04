@@ -158,7 +158,6 @@ async def summarize_comments(raw):
     # Remove internal double-quotes from points
     for cat in results:
         cat["top_points"] = [p.replace('"', '') for p in cat["top_points"]]
-    
     print(results)
 
     return CommentsOut(summary=results)
