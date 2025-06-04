@@ -114,11 +114,11 @@ async def summarize_category(label: int, comments: list[str], nb_points: int):
     prompt = build_summary_prompt(description, comments, nb_points)
 
     async with token_semaphore:
-        async with httpx.AsyncClient(timeout=200.0) as client:
+        async with httpx.AsyncClient(timeout=2000.0) as client:
             response = await client.post(
                 "https://ollama.kube.isc.heia-fr.ch/api/generate",
                 json={
-                    "model": "qwen2.5:32b-instruct",
+                    "model": "qwen2.5:14b-instruct",
                     "prompt": prompt,
                     "stream": False,
                     "temperature": 0.0,
@@ -158,6 +158,8 @@ async def summarize_comments(raw):
     # Remove internal double-quotes from points
     for cat in results:
         cat["top_points"] = [p.replace('"', '') for p in cat["top_points"]]
+    
+    print(results)
 
     return CommentsOut(summary=results)
 
